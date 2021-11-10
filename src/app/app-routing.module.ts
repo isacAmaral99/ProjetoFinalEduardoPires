@@ -4,7 +4,11 @@ import { HomeComponent } from './Navegacao/home/home.component';
 
 const routes: Routes = [
   {path: '', redirectTo: '/home', pathMatch: 'full'},
-  {path: 'home', component: HomeComponent}
+  {path: 'home', component: HomeComponent},
+  {path: 'conta',
+        loadChildren: () => import('./conta/conta.module')
+        .then(m=> m.ContaModule)
+  }
 ];
 
 @NgModule({
