@@ -5,6 +5,11 @@ import { HomeComponent } from './Navegacao/home/home.component';
 const routes: Routes = [
   {path: '', redirectTo: '/home', pathMatch: 'full'},
   {path: 'home', component: HomeComponent},
+  {
+    path: 'fornecedores',
+    loadChildren: () => import('./fornecedor/fornecedor.module')
+      .then(m => m.FornecedorModule)
+  },
   {path: 'conta',
         loadChildren: () => import('./conta/conta.module')
         .then(m=> m.ContaModule)
