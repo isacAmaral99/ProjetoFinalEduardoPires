@@ -6,11 +6,13 @@ import { MenuComponent } from "./menu/menu.component";
 import { HomeComponent } from "./home/home.component";
 import { FooterComponent } from "./footer/footer.component";
 import { NotFoundComponent } from "./notfound/notfound.component";
+import { MenuLoginComponent } from "./menu-login/menu-login.component";
 
 
 @NgModule({
   declarations:[
      MenuComponent,
+     MenuLoginComponent,
     HomeComponent,
     FooterComponent,
     NotFoundComponent
@@ -24,6 +26,7 @@ import { NotFoundComponent } from "./notfound/notfound.component";
   exports :[
     MenuComponent,
         HomeComponent,
+        MenuLoginComponent,
         FooterComponent,
         NotFoundComponent
   ]
