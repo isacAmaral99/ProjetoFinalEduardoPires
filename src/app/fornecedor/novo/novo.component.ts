@@ -11,7 +11,6 @@ import { utilsBr} from 'js-brasil';
 import { ValidationMessages, GenericValidator, DisplayMessage } from 'src/app/utils/generic-form-validation';
 import { Fornecedor } from '../models/fornecedor';
 import { FornecedorService } from '../services/fornecedor.service';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { CepConsulta } from '../models/endereco';
 import { StringUtils } from 'src/app/utils/string-utils';
 
@@ -88,7 +87,7 @@ export class NovoComponent implements OnInit {
         logradouro:['',[Validators.required]],
         numero: ['', [Validators.required]],
         complemento: ['', [Validators.required]],
-        bairo: ['', [Validators.required]],
+        bairro: ['', [Validators.required]],
         cep: ['', [Validators.required,NgBrazilValidators.cep]],
         cidade: ['', [Validators.required]],
         estado: ['', [Validators.required]],
@@ -150,10 +149,16 @@ export class NovoComponent implements OnInit {
   }
 
    adicionarFornecedor() {
+     console.log('chamou')
+     debugger
     if (this.fornecedorForm.dirty && this.fornecedorForm.valid) {
       this.fornecedor = Object.assign({}, this.fornecedor, this.fornecedorForm.value);
       this.formResult = JSON.stringify(this.fornecedor);
 
+      this.fornecedor.endereco.cep = StringUtils.somenteNumeros(this.fornecedor.endereco.cep);
+      this.fornecedor.documento = StringUtils.somenteNumeros(this.fornecedor.documento);
+      this.fornecedor.tipoFornecedor = this.fornecedor.tipoFornecedor == 1 ? +'1' : +'2';
+      console.log(this.fornecedor.tipoFornecedor);
       this.fornecedorService.novoFornecedor(this.fornecedor)
         .subscribe(
           sucesso => { this.processarSucesso(sucesso) },
@@ -188,6 +193,7 @@ export class NovoComponent implements OnInit {
     this.fornecedorForm.reset();
     this.errors = [];
 
+
     let toast = this.toastr.success('Fornecedor cadastrado com sucesso!', 'Sucesso!');
     if (toast) {
       toast.onHidden.subscribe(() => {
@@ -197,7 +203,8 @@ export class NovoComponent implements OnInit {
   }
 
   processarFalha(fail: any) {
-    this.errors = fail.error.errors;
-    this.toastr.error('Ocorreu um erro!', 'Opa :(');
+      this.errors = fail.error.errors;
+      this.toastr.error('Ocorreu um erro!', 'Opa :(');
+
   }
 }
