@@ -1,4 +1,6 @@
 import { Endereco } from './endereco';
+import { Produto } from './produto';
+
 
 export class Fornecedor {
     id: string;
@@ -7,5 +9,5 @@ export class Fornecedor {
     ativo: boolean;
     tipoFornecedor: number;
     endereco: Endereco;
-}
 
+}

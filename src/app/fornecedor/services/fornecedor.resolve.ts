@@ -7,6 +7,7 @@ import { FornecedorService } from "./fornecedor.service";
 export class FornecedorResolve implements Resolve<Fornecedor> {
 
    constructor( private fornecedorService:FornecedorService){}
+
    resolve(route: ActivatedRouteSnapshot){
     return this.fornecedorService.obterPorId(route.params['id']);
    }

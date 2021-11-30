@@ -1,58 +1,92 @@
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
-import { Observable } from "rxjs";
-import { catchError, map } from "rxjs/operators";
+import { Observable } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 import { BaseService } from 'src/app/services/base.service';
+
+import { environment } from 'src/environments/environment';
+import { CepConsulta, Endereco } from '../models/endereco';
 import { Fornecedor } from '../models/fornecedor';
-import { environment } from "src/environments/environment";
-import { CepConsulta } from "../models/endereco";
 
 @Injectable()
 export class FornecedorService extends BaseService {
+  protected UrlServiceV1 = environment.UrlServiceV1;
+  constructor(private http: HttpClient) {
+    super();
+  }
 
-    fornecedor: Fornecedor = new Fornecedor();
-    protected UrlServiceV1 = environment.UrlServiceV1;
-    constructor(private http: HttpClient) { super()
-
-        this.fornecedor.nome = "Teste Fake"
-        this.fornecedor.documento = "32165498754"
-        this.fornecedor.ativo = true
-        this.fornecedor.tipoFornecedor = 1
-    }
-
-    obterTodos(): Observable<Fornecedor[]> {
-        return this.http
-            .get<Fornecedor[]>(this.UrlServiceV1 + "fornecedores")
-            .pipe(catchError(super.serviceError));
-    }
-
-     obterPorId(id: string): Observable<Fornecedor> {
-      return this.http
-      .get<Fornecedor>(this.UrlServiceV1 + "fornecedores/" + id, super.ObterAuthHeaderJson())
+  obterTodos(): Observable<Fornecedor[]> {
+    return this.http
+      .get<Fornecedor[]>(this.UrlServiceV1 + 'fornecedores')
       .pipe(catchError(super.serviceError));
-    }
+  }
 
-    novoFornecedor(fornecedor: Fornecedor): Observable<Fornecedor> {
+  obterPorId(id: string): Observable<Fornecedor> {
+    return this.http
+      .get<Fornecedor>(
+        this.UrlServiceV1 + 'fornecedores/' + id,
+        super.ObterAuthHeaderJson()
+      )
+      .pipe(catchError(super.serviceError));
+  }
 
-      var teste = this.ObterAuthHeaderJson()
-      console.log(teste);
-        return this.http
-            .post(this.UrlServiceV1 + "fornecedores",fornecedor)
-            .pipe(map(super.extractData),
-              catchError(super.serviceError));
-    }
+  novoFornecedor(fornecedor: Fornecedor): Observable<Fornecedor> {
+    var teste = this.ObterAuthHeaderJson();
+    console.log(teste);
+    return this.http
+      .post(this.UrlServiceV1 + 'fornecedores', fornecedor)
+      .pipe(map(super.extractData), catchError(super.serviceError));
+  }
 
-    atualizarFornecedor(fornecedor: Fornecedor): Observable<Fornecedor> {
-        return new Observable<Fornecedor>();
-    }
+  atualizarFornecedor(fornecedor: Fornecedor): Observable<Fornecedor> {
+    debugger;
+    return this.http
+      .put(
+        this.UrlServiceV1 + 'fornecedores/' + fornecedor.id,fornecedor,
+        super.ObterAuthHeaderJson()
+      )
+      .pipe(map(super.extractData), catchError(super.serviceError));
+  }
+  atualizarFornecedor2(fornecedor: Fornecedor): Observable<Fornecedor> {
+    return this.http
+        .put(this.UrlServiceV1 + "fornecedores/" + fornecedor.id, fornecedor, super.ObterAuthHeaderJson())
+        .pipe(
+            map(super.extractData),
+            catchError(super.serviceError));
+}
 
-    excluirFornecedor(id: string): Observable<Fornecedor> {
-        return new Observable<Fornecedor>();
-    }
+  atualizarEndereco(endereco: Endereco): Observable<Endereco> {
+    return this.http
+      .put(
+        this.UrlServiceV1 + 'fornecedores/endereco/' + endereco.id,
+        endereco,
+        super.ObterAuthHeaderJson()
+      )
+      .pipe(map(super.extractData), catchError(super.serviceError));
+  }
 
-    consultaCep(cep :string): Observable<CepConsulta>{
-      return this.http.get<CepConsulta>(`https://viacep.com.br/ws/${cep}/json/`).pipe(catchError(super.serviceError));
-    }
+  excluirFornecedor(id: string): Observable<Fornecedor> {
+    return this.http
+        .delete(this.UrlServiceV1 + "fornecedores/" + id, super.ObterAuthHeaderJson())
+        .pipe(
+            map(super.extractData),
+            catchError(super.serviceError));
+  }
+  // atualizarEndereco(endereco: Endereco): Observable<Endereco> {
+  //   return this.http
+  //     .put(
+  //       this.UrlServiceV1 + 'fornecedores/endereco/' + endereco.id,
+  //       endereco,
+  //       super.ObterAuthHeaderJson()
+  //     )
+  //     .pipe(map(super.extractData), catchError(super.serviceError));
+  // }
+
+  consultaCep(cep: string): Observable<CepConsulta> {
+    return this.http
+      .get<CepConsulta>(`https://viacep.com.br/ws/${cep}/json/`)
+      .pipe(catchError(super.serviceError));
+  }
 }
